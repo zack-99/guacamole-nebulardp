@@ -182,6 +182,9 @@ AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
 
 # Bundled libguac
+AC_SUBST([LOCAL_INCLUDE], '-I$(top_srcdir)/include')
+
+# Bundled libguac
 AC_SUBST([LIBGUAC_LTLIB],   '$(top_builddir)/.libs/libguac.la')
 AC_SUBST([LIBGUAC_INCLUDE], '-I$(top_srcdir)/src/libguac')
 

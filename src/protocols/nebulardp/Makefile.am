@@ -137,8 +137,9 @@ libguac_client_nebulardp_la_CFLAGS = \
     -Werror -Wall -Iinclude    \
     @COMMON_INCLUDE@           \
     @COMMON_SSH_INCLUDE@       \
-    -lguac	               \
-    @RDP_CFLAGS@
+    -lguac	                   \
+    @RDP_CFLAGS@               \
+    @LOCAL_INCLUDE@
 
 libguac_client_nebulardp_la_LDFLAGS = \
     -version-info 0:0:0         \
@@ -170,7 +171,8 @@ libguac_common_svc_client_la_SOURCES =        \
 libguac_common_svc_client_la_CFLAGS = \
     -Werror -Wall -Iinclude           \
     -lguac                            \
-    @RDP_CFLAGS@
+    @RDP_CFLAGS@                      \
+    @LOCAL_INCLUDE@
 
 libguac_common_svc_client_la_LDFLAGS = \
     -module -avoid-version -shared     \
@@ -193,8 +195,9 @@ libguacai_client_la_CFLAGS = \
     -Werror -Wall -Iinclude  \
     @COMMON_INCLUDE@         \
     @COMMON_SSH_INCLUDE@     \
-    -lguac	             \
-    @RDP_CFLAGS@
+    -lguac	                 \
+    @RDP_CFLAGS@             \
+    @LOCAL_INCLUDE@
 
 libguacai_client_la_LDFLAGS =      \
     -module -avoid-version -shared \
@@ -211,7 +214,7 @@ libguacai_client_la_LIBADD = \
 
 if ENABLE_COMMON_SSH
 libguac_client_nebulardp_la_SOURCES += sftp.c
-noinst_HEADERS                += sftp.h
+noinst_HEADERS                      += sftp.h
 libguac_client_nebulardp_la_LIBADD  += @COMMON_SSH_LTLIB@
 endif
 

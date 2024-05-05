@@ -25,6 +25,8 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
+CFLAGS+=-I$(top_builddir)/include
+
 # Subprojects
 DIST_SUBDIRS =               \
     src/common               \
@@ -41,6 +43,3 @@ endif
 if ENABLE_RDP
 SUBDIRS += src/protocols/nebulardp
 endif
-
-CFLAGS += /usr/local/lib/
-CFLAGS += /lib/
