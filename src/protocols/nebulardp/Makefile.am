@@ -137,7 +137,7 @@ libguac_client_nebulardp_la_CFLAGS = \
     -Werror -Wall -Iinclude    \
     @COMMON_INCLUDE@           \
     @COMMON_SSH_INCLUDE@       \
-    -lguac	                   \
+    @LIBGUAC_INCLUDE@          \
     @RDP_CFLAGS@               \
     @LOCAL_INCLUDE@
 
@@ -149,7 +149,7 @@ libguac_client_nebulardp_la_LDFLAGS = \
 
 libguac_client_nebulardp_la_LIBADD = \
     @COMMON_LTLIB@             \
-    -lguac
+    @LIBGUAC_LTLIB@
 
 #
 # Plugins for FreeRDP
@@ -170,7 +170,7 @@ libguac_common_svc_client_la_SOURCES =        \
 
 libguac_common_svc_client_la_CFLAGS = \
     -Werror -Wall -Iinclude           \
-    -lguac                            \
+    @LIBGUAC_INCLUDE@          \
     @RDP_CFLAGS@                      \
     @LOCAL_INCLUDE@
 
@@ -179,7 +179,7 @@ libguac_common_svc_client_la_LDFLAGS = \
     @RDP_LIBS@
 
 libguac_common_svc_client_la_LIBADD = \
-    -lguac
+    @LIBGUAC_LTLIB@
 
 #
 # Audio Input
@@ -195,7 +195,7 @@ libguacai_client_la_CFLAGS = \
     -Werror -Wall -Iinclude  \
     @COMMON_INCLUDE@         \
     @COMMON_SSH_INCLUDE@     \
-    -lguac	                 \
+    @LIBGUAC_INCLUDE@        \
     @RDP_CFLAGS@             \
     @LOCAL_INCLUDE@
 
@@ -206,7 +206,7 @@ libguacai_client_la_LDFLAGS =      \
 
 libguacai_client_la_LIBADD = \
     @COMMON_LTLIB@           \
-    -lguac
+    @LIBGUAC_LTLIB@
 
 #
 # Optional SFTP support
