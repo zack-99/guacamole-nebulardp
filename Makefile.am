@@ -43,3 +43,4 @@ SUBDIRS += src/protocols/nebulardp
 endif
 
 CFLAGS += /usr/local/lib/
+CFLAGS += /lib/
