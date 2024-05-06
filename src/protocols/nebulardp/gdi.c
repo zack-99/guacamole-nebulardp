@@ -396,7 +396,7 @@ void guac_rdp_gdi_mark_frame(rdpContext* context, int starting) {
     /* Flush a new frame if the client is ready for it */
     if (time_elapsed >= guac_client_get_processing_lag(client)) {
         guac_common_display_flush(rdp_client->display);
-        guac_client_end_multiple_frames(client, rdp_client->frames_received);
+        guac_client_end_frame(client/*, rdp_client->frames_received*/);
         guac_socket_flush(client->socket);
         rdp_client->frames_received = 0;
     }

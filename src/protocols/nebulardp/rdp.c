@@ -637,7 +637,7 @@ static int guac_rdp_handle_connection(guac_client* client) {
          * in progress */
         else if (!rdp_client->frames_supported || rdp_client->frames_received) {
             guac_common_display_flush(rdp_client->display);
-            guac_client_end_multiple_frames(client, rdp_client->frames_received);
+            guac_client_end_frame(client/*, rdp_client->frames_received*/);
             guac_socket_flush(client->socket);
             rdp_client->frames_received = 0;
         }
@@ -841,8 +841,8 @@ void* guac_rdp_client_thread(void* data) {
                 !settings->recording_exclude_output,
                 !settings->recording_exclude_mouse,
                 !settings->recording_exclude_touch,
-                settings->recording_include_keys,
-                settings->recording_write_existing);
+                settings->recording_include_keys/*,
+                //settings->recording_write_existing*/);
     }
 
     /* Continue handling connections until error or client disconnect */
