@@ -46,11 +46,10 @@ noinst_HEADERS =            \
 libguac_common_ssh_la_CFLAGS = \
     -Werror -Wall -pedantic    \
     @COMMON_INCLUDE@           \
-    @LIBGUAC_INCLUDE@          \
-    @LOCAL_INCLUDE@
+    @GUACAMOLE_INCLUDE@
 
 libguac_common_ssh_la_LIBADD = \
-    @LIBGUAC_LTLIB@
+    @GUACAMOLE_LTLIB@
 
 libguac_common_ssh_la_LDFLAGS = \
     @PTHREAD_LIBS@              \

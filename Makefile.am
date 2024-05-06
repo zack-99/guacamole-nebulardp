@@ -25,8 +25,6 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-CFLAGS+=-I$(top_builddir)/include
-
 # Subprojects
 DIST_SUBDIRS =               \
     src/common               \

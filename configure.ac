@@ -185,7 +185,12 @@ AC_TYPE_SSIZE_T
 AC_SUBST([LOCAL_INCLUDE], '-I$(top_srcdir)/include')
 
 # Bundled libguac
-AC_SUBST([LIBGUAC_LTLIB],   '$(top_builddir)/.libs/libguac.la')
+AC_SUBST([GUACAMOLE_INCLUDE], '-I/opt/guacamole/include')
+
+# Bundled libguac
+AC_SUBST([GUACAMOLE_LTLIB], '/opt/guacamole/lib')
+
+# Bundled libguac
 AC_SUBST([LIBGUAC_INCLUDE], '-I$(top_srcdir)/src/libguac')
 
 # Common non-libguac utility library
