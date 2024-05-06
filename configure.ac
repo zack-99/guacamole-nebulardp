@@ -182,16 +182,14 @@ AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
 
 # Bundled libguac
-AC_SUBST([LOCAL_INCLUDE], '-I$(top_srcdir)/include')
+AC_SUBST([GUACAMOLE_INCLUDE], '-I$(GUACAMOLE_DIR)/include')
 
 # Bundled libguac
-AC_SUBST([GUACAMOLE_INCLUDE], '-I/opt/guacamole/include')
+AC_SUBST([GUACAMOLE_LTLIB], '$(GUACAMOLE_DIR)/lib')
 
 # Bundled libguac
-AC_SUBST([GUACAMOLE_LTLIB], '/opt/guacamole/lib')
-
-# Bundled libguac
-AC_SUBST([LIBGUAC_INCLUDE], '-I$(top_srcdir)/src/libguac')
+AC_SUBST([LIBGUAC_LTLIB], '$(GUACAMOLE_DIR)/lib/libguac.la')
+AC_SUBST([LIBGUAC_INCLUDE], '-I$(GUACAMOLE_DIR)/include/libguac')
 
 # Common non-libguac utility library
 AC_SUBST([COMMON_LTLIB],   '$(top_builddir)/src/common/libguac_common.la')
@@ -210,8 +208,8 @@ AC_SUBST([LIBGUAC_CLIENT_KUBERNETES_LTLIB],   '$(top_builddir)/src/protocols/kub
 AC_SUBST([LIBGUAC_CLIENT_KUBERNETES_INCLUDE], '-I$(top_srcdir)/src/protocols/kubernetes')
 
 # RDP support
-AC_SUBST([LIBGUAC_CLIENT_RDP_LTLIB],   '$(top_builddir)/src/protocols/rdp/libguac-client-rdp.la')
-AC_SUBST([LIBGUAC_CLIENT_RDP_INCLUDE], '-I$(top_srcdir)/src/protocols/rdp')
+AC_SUBST([LIBGUAC_CLIENT_NEBULARDP_LTLIB],   '$(top_builddir)/src/protocols/nebulardp/libguac-client-nebulardp.la')
+AC_SUBST([LIBGUAC_CLIENT_NEBULARDP_INCLUDE], '-I$(top_srcdir)/src/protocols/nebulardp')
 
 # Terminal emulator
 AC_SUBST([TERMINAL_LTLIB],   '$(top_builddir)/src/terminal/libguac-terminal.la')
