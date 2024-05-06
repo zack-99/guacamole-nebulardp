@@ -181,7 +181,7 @@ void guac_common_display_dup(
     guac_common_display_dup_layers(display->buffers, client, socket);
 
     /* Sends a sync instruction to mark the boundary of the first frame */
-    guac_protocol_send_sync(socket, client->last_sent_timestamp, 1);
+    guac_protocol_send_sync(socket, client->last_sent_timestamp/*, 1*/);
 
     pthread_mutex_unlock(&display->_lock);
 
