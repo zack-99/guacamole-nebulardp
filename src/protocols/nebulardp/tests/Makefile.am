@@ -37,14 +37,14 @@ test_rdp_SOURCES =      \
     fs/basename.c       \
     fs/normalize_path.c
 
-test_rdp_CFLAGS =                \
-    -Werror -Wall -pedantic      \
-    @LIBGUAC_CLIENT_RDP_INCLUDE@ \
-    @LIBGUAC_INCLUDE@
+test_rdp_CFLAGS =                      \
+    -Werror -Wall -pedantic            \
+    @LIBGUAC_CLIENT_NEBULARDP_INCLUDE@ \
+    @GUACAMOLE_INCLUDE@
 
-test_rdp_LDADD =               \
-    @CUNIT_LIBS@               \
-    @LIBGUAC_CLIENT_RDP_LTLIB@ \
+test_rdp_LDADD =                     \
+    @CUNIT_LIBS@                     \
+    @LIBGUAC_CLIENT_NEBULARDP_LTLIB@ \
     @LIBGUAC_LTLIB@
 
 #

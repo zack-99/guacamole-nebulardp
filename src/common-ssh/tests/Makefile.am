@@ -40,7 +40,7 @@ test_common_ssh_CFLAGS =    \
     -Werror -Wall -pedantic \
     @COMMON_INCLUDE@        \
     @COMMON_SSH_INCLUDE@    \
-    @LIBGUAC_INCLUDE@
+    @GUACAMOLE_INCLUDE@
 
 test_common_ssh_LDADD = \
     @CUNIT_LIBS@        \

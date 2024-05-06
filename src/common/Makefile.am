@@ -64,8 +64,7 @@ libguac_common_la_SOURCES = \
 
 libguac_common_la_CFLAGS =  \
     -Werror -Wall -pedantic \
-    @GUACAMOLE_INCLUDE@       \
-    @LOCAL_INCLUDE@
+    @GUACAMOLE_INCLUDE@
 
 libguac_common_la_LIBADD = \
     @GUACAMOLE_LTLIB@
