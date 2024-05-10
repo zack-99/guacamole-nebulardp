@@ -1,1 +1,3 @@
 /guacamole-server
+*.crt
+*.key
