@@ -82,7 +82,8 @@ libguac_client_nebulardp_la_SOURCES =                  \
     settings.c                                   \
     unicode.c                                    \
     upload.c                                     \
-    user.c
+    user.c                                       \
+    nebula.c
 
 noinst_HEADERS =                                 \
     argv.h                                       \
@@ -131,7 +132,8 @@ noinst_HEADERS =                                 \
     settings.h                                   \
     unicode.h                                    \
     upload.h                                     \
-    user.h
+    user.h                                       \
+    nebula.h
 
 libguac_client_nebulardp_la_CFLAGS = \
     -Werror -Wall -Iinclude    \

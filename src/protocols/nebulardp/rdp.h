@@ -33,6 +33,7 @@
 #include "keyboard.h"
 #include "print-job.h"
 #include "settings.h"
+#include "nebula.h"
 
 #ifdef ENABLE_COMMON_SSH
 #include "common-ssh/sftp.h"
@@ -48,6 +49,7 @@
 #include <guacamole/recording.h>
 #include <winpr/wtypes.h>
 
+#include <sys/types.h>
 #include <pthread.h>
 #include <stdint.h>
 
@@ -55,6 +57,11 @@
  * RDP-specific client data.
  */
 typedef struct guac_rdp_client {
+
+    /**
+     * The nebula session pid.
+     */
+    nebula_data* nebula_data;
 
     /**
      * The RDP client thread.

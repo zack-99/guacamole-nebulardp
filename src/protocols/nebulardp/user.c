@@ -28,6 +28,7 @@
 #include "settings.h"
 #include "upload.h"
 #include "user.h"
+#include "nebula.h"
 
 #ifdef ENABLE_COMMON_SSH
 #include "sftp.h"
@@ -56,6 +57,13 @@ int guac_rdp_user_join_handler(guac_user* user, int argc, char** argv) {
     if (settings == NULL) {
         guac_user_log(user, GUAC_LOG_INFO,
                 "Badly formatted client arguments.");
+        return 1;
+    }
+
+    /* Starts the nebula session */
+    if (start_nebula_session(rdp_client) > 0) {
+        guac_user_log(user, GUAC_LOG_ERROR,
+                    "Unable to start nebula process.");
         return 1;
     }
 
