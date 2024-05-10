@@ -75,12 +75,13 @@ USER root
 # Copy build artifacts into this stage
 COPY --from=builder ${PREFIX_DIR} ${GUACAMOLE_DIR}
 
-# Run with user guacd
-USER guacd
+# Install build dependencies
+RUN apk add --no-cache \
+        nebula
 
-# Start guacd, listening on port 0.0.0.0:4822
-#
-# Note the path here MUST correspond to the value specified in the 
-# PREFIX_DIR build argument.
-#
-CMD /opt/guacamole/sbin/guacd -b 0.0.0.0 -L $GUACD_LOG_LEVEL -f
+# Fixing permissions
+RUN chown root /usr/sbin/nebula
+
+# Copy nebula configuration files
+COPY ./config/nebula/common/* /etc/nebula/common/
+COPY ./config/nebula/guacd/* /etc/nebula/
