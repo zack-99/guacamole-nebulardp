@@ -4,7 +4,7 @@
 # PKI defines the location of credentials for this node. Each of these can also be inlined by using the yaml ": |" syntax.
 pki:
   # The CAs that are accepted by this node. Must contain one or more certificates created by 'nebula-cert ca'
-  ca: /etc/nebula/common/ca.crt
+  ca: /etc/nebula/ca.crt
   cert: /etc/nebula/guacd.crt
   key: /etc/nebula/guacd.key
   # blocklist is a list of certificate fingerprints that we will refuse to talk to
@@ -19,7 +19,7 @@ pki:
 #   "{nebula ip}": ["{routable ip/dns name}:{routable port}"]
 # Example, if your lighthouse has the nebula IP of 192.168.100.1 and has the real ip address of 100.64.22.11 and runs on port 4242:
 static_host_map:
-  "192.168.100.1": ["172.18.0.2:4242"]
+  "192.168.100.1": ["172.188.0.2:4242"]
 
 # The static_map config stanza can be used to configure how the static_host_map behaves.
 #static_map:

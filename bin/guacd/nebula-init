@@ -1,0 +1,90 @@
+#!/bin/sh
+
+DEST=$1
+DEST_LAST_PART=${DEST##*.}
+PROTO=$2 #protocol for nebula groups
+
+# Find an available IP
+GUACD_SUBNET=${GUACD_SUBNET%.*}
+ID=1
+
+for ID in $(seq $start 254); do
+  IP="$GUACD_SUBNET.$ID"
+  ping -c 1 -W 1 $IP >/dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    echo "IP $IP is available."
+    break
+  fi
+done
+
+
+# Find an available port
+
+#port=4242
+#while true; do
+#  netstat -anu | grep -qE "0.0.0.0:$port|::ffff:0.0.0.0:$port" 2>&1
+#  if [ $? -ne 0 ]; then
+#    echo "Port $port is available."
+#    break
+#  fi
+#  port=$((port+1))
+#done
+
+
+DEV=$DEV_PREFIX$ID
+
+PORT=$PORT_PREFIX$ID
+
+echo "Generating cert and key: $ID.key and $ID.key in $CERT_DIR/$ID/"
+
+
+
+
+# Generate the certificate
+cd /etc/nebula
+
+/usr/bin/nebula-cert sign -name $ID -ip $IP/$NETMASK -duration $CERT_DURATION - groups "guacd,$PROTO,dest$DEST_LAST_PART"
+
+
+
+# Move the certificate to a temporary directory
+mkdir -p $CERT_DIR/$ID
+
+mv /etc/nebula/$ID.* $CERT_DIR/$ID/
+
+
+# Replace the port and device in the guacd config file
+sed "s|%PORT%|$PORT|g; \
+     s|%CRT%|$CERT_DIR/$ID/$ID.crt|g; \
+     s|%KEY%|$CERT_DIR/$ID/$ID.key|g; \
+     s|%DEV%|$DEV|g" \
+     /etc/nebula/config.guacd.parametric.yml | /usr/sbin/nebula -config /dev/stdin &
+
+# Get the PID of the newly started nebula instance
+nebula_pid=$!
+
+# Save the PID to a file
+echo $nebula_pid > $CERT_DIR/$ID/nebula.pid
+
+
+
+# Wait for the interface to come up
+while true; do
+  if ip addr show $DEV >/dev/null 2>&1; then
+    echo "Interface $DEV is up."
+    break
+  else
+    echo "Waiting for interface $DEV to come up."
+    sleep 1
+  fi
+done
+
+
+
+# Add the prioritary route
+ip route add $DEST/32 dev nebula$ID table 10$ID
+ip rule add from $IP table 10$ID
+
+
+# Exits with the first IP found
+exit $ID

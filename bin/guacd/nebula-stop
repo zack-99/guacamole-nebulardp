@@ -1,0 +1,12 @@
+#!/bin/sh
+
+FD=$1
+DIR=/tmp/nebulardp
+
+# Stop the nebula device
+kill -9 $(cat $DIR/$FD/nebula.pid)
+
+ip rule del from $ip table 10$FD
+
+# Remove the temporary directory
+rm -rf $DIR/$FD 

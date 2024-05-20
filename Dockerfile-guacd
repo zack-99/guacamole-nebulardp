@@ -82,6 +82,9 @@ RUN apk add --no-cache \
 # Fixing permissions
 RUN chown root /usr/sbin/nebula
 
+# Copy binaries
+COPY ./bin/guacd/* /sbin/
+
 # Copy nebula configuration files
-COPY ./config/nebula/common/* /etc/nebula/common/
+COPY ./config/nebula/common/* /etc/nebula/
 COPY ./config/nebula/guacd/* /etc/nebula/

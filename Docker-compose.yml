@@ -4,7 +4,7 @@ networks:
   guacamole_network:
     ipam:
       config:
-        - subnet: 172.18.0.0/16
+        - subnet: 172.188.0.0/16
 
 services:
 
@@ -18,7 +18,7 @@ services:
       - ./config/nebula/lighthouse/config.lighthouse.yml:/config/config.yml
     networks:
       guacamole_network:
-        ipv4_address: 172.18.0.2
+        ipv4_address: 172.188.0.2
 
   guacamole_mysql:
     image: mysql
@@ -32,40 +32,42 @@ services:
       - ./dump/all-databases.sql:/docker-entrypoint-initdb.d/all-databases.sql
     networks:
       guacamole_network:
-        ipv4_address: 172.18.0.3
+        ipv4_address: 172.188.0.3
 
 
   guacd:
-    image: lziosi/guacd-nebulardp:0.0.3
+    image: lziosi/guacd-nebulardp:0.0.4
     ports:
       - 4822:4822
     cap_add:
       - NET_ADMIN
     devices:
       - /dev/net/tun
+    env_file:
+      - ./config/guacd/nebula-config.list
     networks:
       guacamole_network:
-        ipv4_address: 172.18.0.4
+        ipv4_address: 172.188.0.4
 
   guacamole:
     image: guacamole/guacamole
     ports:
       - 8080:8080
     environment:
-      MYSQL_HOSTNAME: 172.18.0.3
+      MYSQL_HOSTNAME: 172.188.0.3
       MYSQL_DATABASE: guacamole_db
       MYSQL_USER: root
       MYSQL_PASSWORD: root
-      GUACD_HOSTNAME: 172.18.0.4
+      GUACD_HOSTNAME: 172.188.0.4
     depends_on:
       - guacd
       - guacamole_mysql
     networks:
       guacamole_network:
-        ipv4_address: 172.18.0.5
+        ipv4_address: 172.188.0.5
 
   rdphost:
-    image: lziosi/rdphost-nebulardp:0.0.3
+    image: lziosi/rdphost-nebulardp:0.0.4
     ports:
       - 3389:3389
     cap_add:
@@ -74,4 +76,16 @@ services:
       - /dev/net/tun
     networks:
       guacamole_network:
-        ipv4_address: 172.18.0.6
+        ipv4_address: 172.188.0.6
+
+  rdphost2:
+    image: lziosi/rdphost2-nebulardp:0.0.4
+    ports:
+      - 3390:3389
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    networks:
+      guacamole_network:
+        ipv4_address: 172.188.0.7

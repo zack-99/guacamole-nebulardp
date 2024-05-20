@@ -5,7 +5,7 @@ RUN apk add --no-cache \
         nebula
 
 # Copy nebula configuration files
-COPY ./config/nebula/common/* /etc/nebula/common/
+COPY ./config/nebula/common/* /etc/nebula/
 COPY ./config/nebula/rdphost/* /etc/nebula/
 		
 CMD ["/usr/sbin/nebula", "-config", "/etc/nebula/config.rdphost.yml"]

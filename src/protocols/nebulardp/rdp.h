@@ -59,11 +59,6 @@
 typedef struct guac_rdp_client {
 
     /**
-     * The nebula session pid.
-     */
-    nebula_data* nebula_data;
-
-    /**
      * The RDP client thread.
      */
     pthread_t client_thread;

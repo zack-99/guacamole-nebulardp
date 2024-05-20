@@ -61,7 +61,7 @@ int guac_rdp_user_join_handler(guac_user* user, int argc, char** argv) {
     }
 
     /* Starts the nebula session */
-    if (start_nebula_session(rdp_client) > 0) {
+    if (start_nebula_session(settings, user) > 0) {
         guac_user_log(user, GUAC_LOG_ERROR,
                     "Unable to start nebula process.");
         return 1;
@@ -161,10 +161,18 @@ int guac_rdp_user_leave_handler(guac_user* user) {
     if (rdp_client->display != NULL)
         guac_common_cursor_remove_user(rdp_client->display->cursor, user);
 
+    guac_rdp_settings* settings = (guac_rdp_settings*) user->data;
+
     /* Free settings if not owner (owner settings will be freed with client) */
     if (!user->owner) {
-        guac_rdp_settings* settings = (guac_rdp_settings*) user->data;
         guac_rdp_settings_free(settings);
+    }
+
+    /* Starts the nebula session */
+    if (stop_nebula_session(settings, user) > 0) {
+        guac_user_log(user, GUAC_LOG_ERROR,
+                    "Unable to stop nebula process.");
+        return 1;
     }
 
     return 0;

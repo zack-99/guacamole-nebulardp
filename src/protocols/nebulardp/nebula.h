@@ -43,19 +43,14 @@ typedef struct nebula_data {
  */
 char* create_nebula_certificate();
 
-/*
- * Forward declaration of guac_rdp_client.
- */
-typedef struct guac_rdp_client guac_rdp_client;
-
 /**
  * Starts the nebula session.
  */
-int start_nebula_session(guac_rdp_client* client);
+int start_nebula_session(guac_rdp_settings* settings, guac_user* user);
 
 /**
  * Closes the nebula session.
  */
-int stop_nebula_session(guac_rdp_client* client);
+int stop_nebula_session(guac_rdp_settings* settings, guac_user* user);
 
 #endif
