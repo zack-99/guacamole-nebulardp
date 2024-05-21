@@ -1,4 +1,4 @@
-name: Build Linux Container Image and Push to ACR
+name: Build RdpHost Container Image and Push to ACR
 
 on:
   workflow_dispatch:
