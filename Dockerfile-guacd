@@ -37,6 +37,7 @@ ARG GUACAMOLE_DIR=/opt/guacamole
 ARG PREFIX_DIR=/tmp/guacamole-nebulardp-build
 
 # Build guacamole-server and its core protocol library dependencies
+RUN chmod +x ${BUILD_DIR}/src/guacd-docker/bin/build-protocol.sh
 RUN ${BUILD_DIR}/src/guacd-docker/bin/build-protocol.sh
 
 
