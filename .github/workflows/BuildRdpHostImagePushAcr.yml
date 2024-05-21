@@ -1,0 +1,22 @@
+name: Build Linux Container Image and Push to ACR
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./
+    steps:
+    - uses: actions/checkout@v2
+    - uses: azure/docker-login@v1
+      with:
+        login-server: myacr38264862.azurecr.io
+        username: myacr38264862
+        password: MUH1PHpKLFelGPwl619ZwpdaN6a+EqJbHdFHi8Gcp0+ACRAb//MQ
+    - run: |
+        docker build . -t myacr38264862.azurecr.io/rdphost:${{ github.sha }} -f Dockerfile-rdphost .
+        docker push myacr38264862.azurecr.io/rdphost:${{ github.sha }}
