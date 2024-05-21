@@ -18,5 +18,5 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build . -t myacr38264862.azurecr.io/guacd:${{ github.sha }} -f Dockerfile-guacd
-        docker push myacr38264862.azurecr.io/guacd:${{ github.sha }}
+        docker build . -t myacr3826484279.azurecr.io/guacd:${{ github.sha }} -f Dockerfile-guacd
+        docker push myacr3826484279.azurecr.io/guacd:${{ github.sha }}
