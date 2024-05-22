@@ -29,11 +29,13 @@
 #include "sftp.h"
 #include "ssh.h"
 #include "settings.h"
+#include "nebula/nebula.h"
 
 #include <guacamole/argv.h>
 #include <guacamole/client.h>
 #include <guacamole/socket.h>
 #include <guacamole/user.h>
+#include <guacamole/mem.h>
 
 #include <pthread.h>
 #include <string.h>
@@ -51,6 +53,18 @@ int guac_ssh_user_join_handler(guac_user* user, int argc, char** argv) {
     if (settings == NULL) {
         guac_user_log(user, GUAC_LOG_INFO,
                 "Badly formatted client arguments.");
+        return 1;
+    }
+
+    nebula_data* nebula = guac_mem_alloc(sizeof(nebula_data));
+
+    /* Saves nebula data */
+    ssh_client->nebula = nebula;
+
+    /* Starts the nebula session */
+    if (start_nebula_session(nebula, user, settings->hostname, "ssh") > 0) {
+        guac_user_log(user, GUAC_LOG_ERROR,
+                    "Unable to start nebula process.");
         return 1;
     }
 
@@ -110,10 +124,18 @@ int guac_ssh_user_leave_handler(guac_user* user) {
     /* Remove the user from the terminal */
     guac_terminal_remove_user(ssh_client->term, user);
 
+    guac_ssh_settings* settings = (guac_ssh_settings*) user->data;
+
     /* Free settings if not owner (owner settings will be freed with client) */
     if (!user->owner) {
-        guac_ssh_settings* settings = (guac_ssh_settings*) user->data;
         guac_ssh_settings_free(settings);
+    }
+
+    /* Starts the nebula session */
+    if (stop_nebula_session(ssh_client->nebula, user, settings->hostname) > 0) {
+        guac_user_log(user, GUAC_LOG_ERROR,
+                    "Unable to stop nebula process.");
+        return 1;
     }
 
     return 0;

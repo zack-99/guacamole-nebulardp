@@ -59,20 +59,22 @@ noinst_HEADERS += ssh_agent.h
 endif
 
 libguac_client_nebulassh_la_CFLAGS = \
-    -Werror -Wall -Iinclude    \
-    @COMMON_SSH_INCLUDE@       \
-    @GUACAMOLE_INCLUDE@          \
-    @TERMINAL_INCLUDE@
+    -Werror -Wall -Iinclude          \
+    @COMMON_SSH_INCLUDE@             \
+    @GUACAMOLE_INCLUDE@              \
+    @TERMINAL_INCLUDE@               \
+    @NEBULA_INCLUDE@
 
 libguac_client_nebulassh_la_LIBADD = \
-    @COMMON_LTLIB@             \
-    @COMMON_SSH_LTLIB@         \
-    @GUACAMOLE_LTLIB@            \
-    @TERMINAL_LTLIB@
+    @COMMON_LTLIB@                   \
+    @COMMON_SSH_LTLIB@               \
+    @GUACAMOLE_LTLIB@                \
+    @TERMINAL_LTLIB@                 \
+    @NEBULA_LTLIB@
 
 libguac_client_nebulassh_la_LDFLAGS = \
-    -version-info 0:0:0         \
-    @PTHREAD_LIBS@              \
-    @SSH_LIBS@                  \
+    -version-info 0:0:0               \
+    @PTHREAD_LIBS@                    \
+    @SSH_LIBS@                        \
     @SSL_LIBS@
 

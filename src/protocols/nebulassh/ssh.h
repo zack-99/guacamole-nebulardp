@@ -28,6 +28,7 @@
 #include "common-ssh/user.h"
 #include "settings.h"
 #include "terminal/terminal.h"
+#include "nebula/nebula.h"
 
 #ifdef ENABLE_SSH_AGENT
 #include "ssh_agent.h"
@@ -42,6 +43,11 @@
  * SSH-specific client data.
  */
 typedef struct guac_ssh_client {
+
+    /**
+     * Data of the nebula session linked to the RDP instance.
+     */
+    nebula_data* nebula;
 
     /**
      * SSH connection settings.

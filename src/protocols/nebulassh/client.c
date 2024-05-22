@@ -127,6 +127,10 @@ int guac_ssh_client_free_handler(guac_client* client) {
     }
 
     /* Clean up recording, if in progress */
+    if (ssh_client->nebula != NULL)
+        guac_mem_free(ssh_client->nebula);
+
+    /* Clean up recording, if in progress */
     if (ssh_client->recording != NULL)
         guac_recording_free(ssh_client->recording);
 
