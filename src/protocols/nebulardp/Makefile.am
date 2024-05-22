@@ -82,8 +82,7 @@ libguac_client_nebulardp_la_SOURCES =                  \
     settings.c                                   \
     unicode.c                                    \
     upload.c                                     \
-    user.c                                       \
-    nebula.c
+    user.c
 
 noinst_HEADERS =                                 \
     argv.h                                       \
@@ -132,15 +131,15 @@ noinst_HEADERS =                                 \
     settings.h                                   \
     unicode.h                                    \
     upload.h                                     \
-    user.h                                       \
-    nebula.h
+    user.h
 
 libguac_client_nebulardp_la_CFLAGS = \
     -Werror -Wall -Iinclude    \
     @COMMON_INCLUDE@           \
     @COMMON_SSH_INCLUDE@       \
     @RDP_CFLAGS@               \
-    @GUACAMOLE_INCLUDE@
+    @GUACAMOLE_INCLUDE@        \
+    @NEBULA_INCLUDE@
 
 libguac_client_nebulardp_la_LDFLAGS = \
     -version-info 0:0:0         \
@@ -150,7 +149,8 @@ libguac_client_nebulardp_la_LDFLAGS = \
 
 libguac_client_nebulardp_la_LIBADD = \
     @COMMON_LTLIB@                   \
-    @GUACAMOLE_LTLIB@
+    @GUACAMOLE_LTLIB@                \
+    @NEBULA_LTLIB@
 
 #
 # Plugins for FreeRDP
@@ -196,7 +196,8 @@ libguacai_client_la_CFLAGS = \
     @COMMON_INCLUDE@         \
     @COMMON_SSH_INCLUDE@     \
     @RDP_CFLAGS@             \
-    @GUACAMOLE_INCLUDE@
+    @GUACAMOLE_INCLUDE@      \
+    @NEBULA_INCLUDE@
 
 libguacai_client_la_LDFLAGS =      \
     -module -avoid-version -shared \
@@ -205,7 +206,8 @@ libguacai_client_la_LDFLAGS =      \
 
 libguacai_client_la_LIBADD = \
     @COMMON_LTLIB@           \
-    @GUACAMOLE_LTLIB@
+    @GUACAMOLE_LTLIB@        \
+    @NEBULA_LTLIB@
 
 #
 # Optional SFTP support

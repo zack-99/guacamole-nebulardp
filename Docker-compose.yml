@@ -36,7 +36,7 @@ services:
 
 
   guacd:
-    image: lziosi/guacd-nebulardp:0.0.4
+    image: lziosi/guacd-nebulardp:0.0.5
     ports:
       - 4822:4822
     cap_add:
@@ -89,3 +89,15 @@ services:
     networks:
       guacamole_network:
         ipv4_address: 172.188.0.7
+
+  sshhost:
+    image: atlassian/ssh-ubuntu:0.2.2
+    ports:
+      - 22:22
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    networks:
+      guacamole_network:
+        ipv4_address: 172.188.0.8

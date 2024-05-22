@@ -17,12 +17,14 @@
  * under the License.
  */
 
-#include "rdp.h"
-#include "settings.h"
-#include "nebula.h"
+#include "nebula/nebula.h"
 
 #include <guacamole/mem.h>
 #include <guacamole/client.h>
+#include <guacamole/user.h>
+
+#include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -35,6 +37,7 @@
 
 
 //TODO: save ID in guac_rdp_settings or guac_rdp_client
+//TODO: nebula certificate expire doesn't close the connection
 
 
 /**
@@ -75,7 +78,7 @@ typedef struct guac_socket_fd_data {
 /**
  * Starts the nebula session.
  */
-int start_nebula_session(guac_rdp_settings* settings, guac_user* user) {
+int start_nebula_session(nebula_data* nebula, guac_user* user, char* hostname, char* protocol) {
     char interface[20];
 
     /* Resets SIGCHLD (force automatic removal of children) */
@@ -92,18 +95,15 @@ int start_nebula_session(guac_rdp_settings* settings, guac_user* user) {
         /* Child process. Execute nebula. */
         execlp(getenv("NEBULA_INIT_SCRIPT"),
                getenv("NEBULA_INIT_SCRIPT"),
-               settings->hostname,
-               "rdp", (char *)NULL);
+               hostname,
+               protocol, (char *)NULL);
     } else if (nebula_pid < 0)
         /* Fork failed. Exit. */
         return 1;
 
-    /* ID obtained through exit code from the nebula init script */
-    int ID;
-
     /* Waits for nebula init to terminate. Collect exit code which is the last
        digits of the new interface/IP (default: nebula<ID>/192.168.101.<ID>) */
-    if(waitpid(nebula_pid, &ID, 0) == -1) {
+    if(waitpid(nebula_pid, &nebula->session_id, 0) == -1) {
         /* Waitpid fails */
         perror("waitpid");
         return 1;
@@ -116,11 +116,11 @@ int start_nebula_session(guac_rdp_settings* settings, guac_user* user) {
     }
 
     /* Builds up the interface name */
-    sprintf(interface, "%s%d", getenv("DEV_PREFIX"), WEXITSTATUS(ID));
+    sprintf(interface, "%s%d", getenv("DEV_PREFIX"), WEXITSTATUS(nebula->session_id));
 
     /* Prints some info */
     guac_user_log(user, GUAC_LOG_INFO,
-                    "Generated IP ends with: %d", ID);
+                    "Generated IP ends with: %d", nebula->session_id);
 
     guac_user_log(user, GUAC_LOG_INFO,
                     "Interface name: %s", interface);
@@ -144,7 +144,7 @@ int start_nebula_session(guac_rdp_settings* settings, guac_user* user) {
 /**
  * Closes the nebula session.
  */
-int stop_nebula_session(guac_rdp_settings* settings, guac_user* user) {
+int stop_nebula_session(nebula_data* data, guac_user* user, char* hostname) {
     guac_user_log(user, GUAC_LOG_INFO,
                     "Stopping: TODO");
     

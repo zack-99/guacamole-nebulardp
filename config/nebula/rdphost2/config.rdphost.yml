@@ -355,8 +355,7 @@ firewall:
     # Allow tcp/3389 (RDP) from any host
     - port: 3389
       proto: tcp
-      host: any
       groups:
         - guacd
         - rdp
-        - dest1
+        - dest2

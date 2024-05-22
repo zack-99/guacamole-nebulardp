@@ -23,33 +23,21 @@
 # to you by the ASF under the Apache License, Version 2.0, as described above.
 #
 
+AUTOMAKE_OPTIONS = foreign 
 ACLOCAL_AMFLAGS = -I m4
 
-# Subprojects
-DIST_SUBDIRS =               \
-    src/common               \
-    src/common-ssh	         \
-    src/terminal             \
-    src/nebula  	         \
-    src/protocols/nebulardp  \
-    src/protocols/nebulassh
+noinst_LTLIBRARIES = libguac_nebula.la
 
-SUBDIRS =        \
-    src/common   \
-    src/nebula
+noinst_HEADERS =            \
+    nebula/nebula.h
 
-if ENABLE_COMMON_SSH
-SUBDIRS += src/common-ssh
-endif
+libguac_nebula_la_SOURCES = \
+    nebula.c
 
-if ENABLE_TERMINAL
-SUBDIRS += src/terminal
-endif
+libguac_nebula_la_CFLAGS =  \
+    -Werror -Wall -pedantic \
+    @GUACAMOLE_INCLUDE@
 
-if ENABLE_SSH
-SUBDIRS += src/protocols/nebulassh
-endif
+libguac_nebula_la_LIBADD = \
+    @GUACAMOLE_LTLIB@
 
-if ENABLE_RDP
-SUBDIRS += src/protocols/nebulardp
-endif

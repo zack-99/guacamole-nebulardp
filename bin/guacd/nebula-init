@@ -43,7 +43,7 @@ echo "Generating cert and key: $ID.key and $ID.key in $CERT_DIR/$ID/"
 # Generate the certificate
 cd /etc/nebula
 
-/usr/bin/nebula-cert sign -name $ID -ip $IP/$NETMASK -duration $CERT_DURATION - groups "guacd,$PROTO,dest$DEST_LAST_PART"
+/usr/bin/nebula-cert sign -name $ID -ip $IP/$NETMASK -duration $CERT_DURATION -groups "guacd,$PROTO,dest$DEST_LAST_PART"
 
 
 
@@ -82,7 +82,7 @@ done
 
 
 # Add the prioritary route
-ip route add $DEST/32 dev nebula$ID table 10$ID
+ip route add $DEST/32 dev $DEV_PREFIX$ID table 10$ID
 ip rule add from $IP table 10$ID
 
 

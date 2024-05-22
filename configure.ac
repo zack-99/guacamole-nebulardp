@@ -18,7 +18,7 @@
 #
 
 AC_PREREQ([2.61])
-AC_INIT([libguac-client-nebulardp-container], [0.1.0])
+AC_INIT([libguac-client-nebula-container], [0.1.0])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 AM_SILENT_RULES([yes])
@@ -191,6 +191,10 @@ AC_SUBST([GUACAMOLE_LTLIB], '$(GUACAMOLE_DIR)/lib')
 AC_SUBST([LIBGUAC_LTLIB], '$(GUACAMOLE_DIR)/lib/libguac.la')
 AC_SUBST([LIBGUAC_INCLUDE], '-I$(GUACAMOLE_DIR)/include/libguac')
 
+# Common nebula utility library
+AC_SUBST([NEBULA_LTLIB],   '$(top_builddir)/src/nebula/libguac_nebula.la')
+AC_SUBST([NEBULA_INCLUDE], '-I$(top_srcdir)/src/nebula')
+
 # Common non-libguac utility library
 AC_SUBST([COMMON_LTLIB],   '$(top_builddir)/src/common/libguac_common.la')
 AC_SUBST([COMMON_INCLUDE], '-I$(top_srcdir)/src/common')
@@ -207,9 +211,13 @@ AC_SUBST([COMMON_SSH_INCLUDE], '-I$(top_srcdir)/src/common-ssh')
 AC_SUBST([LIBGUAC_CLIENT_KUBERNETES_LTLIB],   '$(top_builddir)/src/protocols/kubernetes/libguac-client-kubernetes.la')
 AC_SUBST([LIBGUAC_CLIENT_KUBERNETES_INCLUDE], '-I$(top_srcdir)/src/protocols/kubernetes')
 
-# RDP support
+# NEBULARDP support
 AC_SUBST([LIBGUAC_CLIENT_NEBULARDP_LTLIB],   '$(top_builddir)/src/protocols/nebulardp/libguac-client-nebulardp.la')
 AC_SUBST([LIBGUAC_CLIENT_NEBULARDP_INCLUDE], '-I$(top_srcdir)/src/protocols/nebulardp')
+
+# NEBULASSH support
+AC_SUBST([LIBGUAC_CLIENT_NEBULASSH_LTLIB],   '$(top_builddir)/src/protocols/nebulassh/libguac-client-nebulassh.la')
+AC_SUBST([LIBGUAC_CLIENT_NEBULASSH_INCLUDE], '-I$(top_srcdir)/src/protocols/nebulassh')
 
 # Terminal emulator
 AC_SUBST([TERMINAL_LTLIB],   '$(top_builddir)/src/terminal/libguac-terminal.la')
@@ -1187,8 +1195,11 @@ AC_CONFIG_FILES([Makefile
                  src/common/tests/Makefile
                  src/common-ssh/Makefile
                  src/common-ssh/tests/Makefile
+                 src/terminal/Makefile
+                 src/nebula/Makefile
                  src/protocols/nebulardp/Makefile
-                 src/protocols/nebulardp/tests/Makefile])
+                 src/protocols/nebulardp/tests/Makefile
+                 src/protocols/nebulassh/Makefile])
 AC_OUTPUT
 
 #

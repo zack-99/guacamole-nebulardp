@@ -17,40 +17,25 @@
  * under the License.
  */
 
-#ifndef GUAC_RDP_NEBULA_H
-#define GUAC_RDP_NEBULA_H
+#ifndef GUAC_SSH_PIPE_H
+#define GUAC_SSH_PIPE_H
 
-#include <sys/types.h>
+#include "config.h"
 
-/**
- * The nebula data used for the session.
- */
-typedef struct nebula_data {
-    /**
-     * The nebula files (certificate and key) used for the session.
-     */
-    char* file_name;
-
-    /**
-     * The pid of the nebula process of the session.
-     */
-    pid_t nebula_pid;
-
-} nebula_data;
+#include <guacamole/user.h>
 
 /**
- * The current state of a directory listing operation.
+ * The name reserved for the inbound pipe stream which forces the terminal
+ * emulator's STDIN to be received from the pipe.
  */
-char* create_nebula_certificate();
+#define GUAC_SSH_STDIN_PIPE_NAME "STDIN"
 
 /**
- * Starts the nebula session.
+ * Handles an incoming stream from a Guacamole "pipe" instruction. If the pipe
+ * is named "STDIN", the contents of the pipe stream are redirected to
+ * STDIN of the terminal emulator for as long as the pipe is open.
  */
-int start_nebula_session(guac_rdp_settings* settings, guac_user* user);
-
-/**
- * Closes the nebula session.
- */
-int stop_nebula_session(guac_rdp_settings* settings, guac_user* user);
+guac_user_pipe_handler guac_ssh_pipe_handler;
 
 #endif
+
