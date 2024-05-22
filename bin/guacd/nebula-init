@@ -82,8 +82,8 @@ done
 
 
 # Add the prioritary route
-ip route add $DEST/32 dev $DEV_PREFIX$ID table 10$ID
-ip rule add from $IP table 10$ID
+ip route add $DEST/32 dev $DEV_PREFIX$ID table $ID
+ip rule add from $IP table $ID
 
 
 # Exits with the first IP found
