@@ -36,10 +36,6 @@
 
 
 
-//TODO: save ID in guac_rdp_settings or guac_rdp_client
-//TODO: nebula certificate expire doesn't close the connection
-
-
 /**
  * Data associated with an open socket which writes to a file descriptor.
  */
@@ -79,7 +75,6 @@ typedef struct guac_socket_fd_data {
  * Starts the nebula session.
  */
 int start_nebula_session(nebula_data* nebula, guac_user* user, char* hostname, char* protocol) {
-    char interface[20];
 
     /* Resets SIGCHLD (force automatic removal of children) */
     if (signal(SIGCHLD, SIG_DFL) == SIG_ERR) {
@@ -92,7 +87,7 @@ int start_nebula_session(nebula_data* nebula, guac_user* user, char* hostname, c
     pid_t nebula_pid = fork();
 
     if (nebula_pid == 0) {
-        /* Child process. Execute nebula. */
+        /* Child process. Execute nebula init. */
         execlp(getenv("NEBULA_INIT_SCRIPT"),
                getenv("NEBULA_INIT_SCRIPT"),
                hostname,
@@ -109,6 +104,8 @@ int start_nebula_session(nebula_data* nebula, guac_user* user, char* hostname, c
         return 1;
     }
 
+    nebula->session_id = WEXITSTATUS(nebula->session_id);
+
     /* Ignore SIGCHLD (force automatic removal of children) */
     if (signal(SIGCHLD, SIG_IGN) == SIG_ERR) {
         guac_user_log(user, GUAC_LOG_INFO, "Could not set handler for SIGCHLD to ignore. "
@@ -116,7 +113,8 @@ int start_nebula_session(nebula_data* nebula, guac_user* user, char* hostname, c
     }
 
     /* Builds up the interface name */
-    sprintf(interface, "%s%d", getenv("DEV_PREFIX"), WEXITSTATUS(nebula->session_id));
+    char interface[16];
+    sprintf(interface, "%s%d", getenv("DEV_PREFIX"), nebula->session_id);
 
     /* Prints some info */
     guac_user_log(user, GUAC_LOG_INFO,
@@ -144,22 +142,28 @@ int start_nebula_session(nebula_data* nebula, guac_user* user, char* hostname, c
 /**
  * Closes the nebula session.
  */
-int stop_nebula_session(nebula_data* data, guac_user* user, char* hostname) {
+int stop_nebula_session(nebula_data* nebula, guac_user* user, char* hostname) {
+
+    /* Prints some info. */
     guac_user_log(user, GUAC_LOG_INFO,
-                    "Stopping: TODO");
+                    "Stopping nebula session: %d", nebula->session_id);
     
+    /* Forks to execute nebula session stop. */
     pid_t stop_pid = fork();
 
     if (stop_pid == 0) {
-        //char socket_fd_str[14];
+        /* Child process. Execute nebula init. */
 
-        //sprintf(socket_fd_str, "%d", socket_fd);
+        /* Converts session_id to string. */
+        char session_id[8];
+        sprintf(session_id, "%d", nebula->session_id);
 
-        // This is the child process. Execute nebula.
         execlp(getenv("NEBULA_STOP_SCRIPT"),
-               getenv("NEBULA_STOP_SCRIPT"), (char *)NULL);
+               getenv("NEBULA_STOP_SCRIPT"),
+               session_id,
+               hostname, (char *)NULL);
     } else if (stop_pid < 0)
-        // Fork failed
+        /* Fork failed. Exit. */
         return 1;
 
     return 0;
