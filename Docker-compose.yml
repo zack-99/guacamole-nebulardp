@@ -22,8 +22,6 @@ services:
 
   guacamole_mysql:
     image: mysql
-    ports:
-      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: guacamole_db
@@ -36,9 +34,7 @@ services:
 
 
   guacd:
-    image: lziosi/guacd-nebulardp:0.0.5
-    ports:
-      - 4822:4822
+    image: lziosi/guacd-nebula:0.0.6
     cap_add:
       - NET_ADMIN
     devices:
@@ -67,37 +63,44 @@ services:
         ipv4_address: 172.188.0.5
 
   rdphost:
-    image: lziosi/rdphost-nebulardp:0.0.4
-    ports:
-      - 3389:3389
+    image: lziosi/rdphost-nebula:0.0.5
     cap_add:
       - NET_ADMIN
     devices:
       - /dev/net/tun
+    volumes:
+      - ./config/nebula/common:/etc/nebula/common
+      - ./config/nebula/rdphost:/etc/nebula
     networks:
       guacamole_network:
         ipv4_address: 172.188.0.6
 
   rdphost2:
-    image: lziosi/rdphost2-nebulardp:0.0.4
-    ports:
-      - 3390:3389
+    image: lziosi/rdphost-nebula:0.0.5
     cap_add:
       - NET_ADMIN
     devices:
       - /dev/net/tun
+    volumes:
+      - ./config/nebula/common:/etc/nebula/common
+      - ./config/nebula/rdphost2:/etc/nebula
     networks:
       guacamole_network:
         ipv4_address: 172.188.0.7
 
   sshhost:
-    image: atlassian/ssh-ubuntu:0.2.2
-    ports:
-      - 22:22
+    image: lziosi/sshhost-nebula:0.0.5
     cap_add:
       - NET_ADMIN
     devices:
       - /dev/net/tun
+    volumes:
+      - ./config/nebula/common:/etc/nebula/common
+      - ./config/nebula/sshhost:/etc/nebula
+    environment:
+      - PASSWORD_ACCESS=true
+      - USER_NAME=abc
+      - USER_PASSWORD=abc
     networks:
       guacamole_network:
-        ipv4_address: 172.188.0.8
+        ipv4_address: 172.188.0.9
