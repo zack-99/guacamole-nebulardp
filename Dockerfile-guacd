@@ -6,10 +6,12 @@ USER root
 # Install build dependencies
 RUN apk add --no-cache \
         git            \
+        grep           \
         autoconf       \
         automake       \
-        autoconf       \
         make           \
+        build-base     \
+        cmake          \
         pkgconfig      \
         libtool        \
         alpine-sdk     \
@@ -20,7 +22,10 @@ RUN apk add --no-cache \
         libogg-dev     \
         libvorbis-dev  \
         libwebp-dev    \
-        cunit-dev
+        cunit-dev      \
+        pango-dev      \
+        pulseaudio-dev \
+        util-linux-dev
 
 # Copy source to container for sake of build
 ARG BUILD_DIR=/tmp/guacamole-nebulardp
@@ -35,6 +40,20 @@ ARG GUACAMOLE_DIR=/opt/guacamole
 # Base directory for installed guacamole-nebulardp build artifacts.
 #
 ARG PREFIX_DIR=/tmp/guacamole-nebulardp-build
+
+#
+# Build ssh library dependencies
+#
+ARG WITH_LIBSSH2='libssh2-\d+(\.\d+)+'
+ARG WITH_LIBTELNET='\d+(\.\d+)+'
+
+ARG LIBSSH2_OPTS="\
+    -DBUILD_EXAMPLES=OFF \
+    -DBUILD_SHARED_LIBS=ON"
+
+ARG LIBTELNET_OPTS="\
+    --disable-static \
+    --disable-util"
 
 # Build guacamole-server and its core protocol library dependencies
 RUN chmod +x ${BUILD_DIR}/src/guacd-docker/bin/build-protocol.sh

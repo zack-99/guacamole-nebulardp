@@ -5,8 +5,8 @@
 pki:
   # The CAs that are accepted by this node. Must contain one or more certificates created by 'nebula-cert ca'
   ca: /etc/nebula/common/ca.crt
-  cert: /etc/nebula/rdphost.crt
-  key: /etc/nebula/rdphost.key
+  cert: /etc/nebula/sshhost.crt
+  key: /etc/nebula/sshhost.key
   # blocklist is a list of certificate fingerprints that we will refuse to talk to
   #blocklist:
   #  - c99d4e650533b92061b09918e838a5a0a6aaee21eed1d12fd937682865936c72
@@ -353,9 +353,9 @@ firewall:
 
     # TODO: restrict host to guacd and groups
     # Allow tcp/3389 (RDP) from any host
-    - port: 3389
+    - port: 2222
       proto: tcp
       groups:
         - guacd
-        - rdp
-        - dest2
+        - ssh
+        - dest1

@@ -17,12 +17,14 @@
  * under the License.
  */
 
-#include "rdp.h"
-#include "settings.h"
-#include "nebula.h"
+#include "nebula/nebula.h"
 
 #include <guacamole/mem.h>
 #include <guacamole/client.h>
+#include <guacamole/user.h>
+
+#include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -32,9 +34,6 @@
 #include <string.h>
 #include <errno.h>
 
-
-
-//TODO: save ID in guac_rdp_settings or guac_rdp_client
 
 
 /**
@@ -75,8 +74,7 @@ typedef struct guac_socket_fd_data {
 /**
  * Starts the nebula session.
  */
-int start_nebula_session(guac_rdp_settings* settings, guac_user* user) {
-    char interface[20];
+int start_nebula_session(nebula_data* nebula, guac_user* user, char* hostname, char* protocol) {
 
     /* Resets SIGCHLD (force automatic removal of children) */
     if (signal(SIGCHLD, SIG_DFL) == SIG_ERR) {
@@ -89,25 +87,24 @@ int start_nebula_session(guac_rdp_settings* settings, guac_user* user) {
     pid_t nebula_pid = fork();
 
     if (nebula_pid == 0) {
-        /* Child process. Execute nebula. */
+        /* Child process. Execute nebula init. */
         execlp(getenv("NEBULA_INIT_SCRIPT"),
                getenv("NEBULA_INIT_SCRIPT"),
-               settings->hostname,
-               "rdp", (char *)NULL);
+               hostname,
+               protocol, (char *)NULL);
     } else if (nebula_pid < 0)
         /* Fork failed. Exit. */
         return 1;
 
-    /* ID obtained through exit code from the nebula init script */
-    int ID;
-
     /* Waits for nebula init to terminate. Collect exit code which is the last
        digits of the new interface/IP (default: nebula<ID>/192.168.101.<ID>) */
-    if(waitpid(nebula_pid, &ID, 0) == -1) {
+    if(waitpid(nebula_pid, &nebula->session_id, 0) == -1) {
         /* Waitpid fails */
         perror("waitpid");
         return 1;
     }
+
+    nebula->session_id = WEXITSTATUS(nebula->session_id);
 
     /* Ignore SIGCHLD (force automatic removal of children) */
     if (signal(SIGCHLD, SIG_IGN) == SIG_ERR) {
@@ -116,11 +113,12 @@ int start_nebula_session(guac_rdp_settings* settings, guac_user* user) {
     }
 
     /* Builds up the interface name */
-    sprintf(interface, "%s%d", getenv("DEV_PREFIX"), WEXITSTATUS(ID));
+    char interface[16];
+    sprintf(interface, "%s%d", getenv("DEV_PREFIX"), nebula->session_id);
 
     /* Prints some info */
     guac_user_log(user, GUAC_LOG_INFO,
-                    "Generated IP ends with: %d", ID);
+                    "Generated IP ends with: %d", nebula->session_id);
 
     guac_user_log(user, GUAC_LOG_INFO,
                     "Interface name: %s", interface);
@@ -144,22 +142,28 @@ int start_nebula_session(guac_rdp_settings* settings, guac_user* user) {
 /**
  * Closes the nebula session.
  */
-int stop_nebula_session(guac_rdp_settings* settings, guac_user* user) {
+int stop_nebula_session(nebula_data* nebula, guac_user* user, char* hostname) {
+
+    /* Prints some info. */
     guac_user_log(user, GUAC_LOG_INFO,
-                    "Stopping: TODO");
+                    "Stopping nebula session: %d", nebula->session_id);
     
+    /* Forks to execute nebula session stop. */
     pid_t stop_pid = fork();
 
     if (stop_pid == 0) {
-        //char socket_fd_str[14];
+        /* Child process. Execute nebula init. */
 
-        //sprintf(socket_fd_str, "%d", socket_fd);
+        /* Converts session_id to string. */
+        char session_id[8];
+        sprintf(session_id, "%d", nebula->session_id);
 
-        // This is the child process. Execute nebula.
         execlp(getenv("NEBULA_STOP_SCRIPT"),
-               getenv("NEBULA_STOP_SCRIPT"), (char *)NULL);
+               getenv("NEBULA_STOP_SCRIPT"),
+               session_id,
+               hostname, (char *)NULL);
     } else if (stop_pid < 0)
-        // Fork failed
+        /* Fork failed. Exit. */
         return 1;
 
     return 0;

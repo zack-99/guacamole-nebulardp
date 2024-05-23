@@ -1,12 +1,21 @@
 #!/bin/sh
 
-FD=$1
-DIR=/tmp/nebulardp
+ID=$1
+DEST=$2
+
+GUACD_SUBNET=${GUACD_SUBNET%.*}
+IP="$GUACD_SUBNET.$ID"
+
+nebula_pid=$(cat $CERT_DIR/$ID/nebula.pid)
+
+# Remove the prioritary route
+ip route del $DEST/32 dev $DEV_PREFIX$ID table $ID
+ip rule del from $IP table $ID
+
+echo "Killing nebula PID: $nebula_pid"
 
 # Stop the nebula device
-kill -9 $(cat $DIR/$FD/nebula.pid)
-
-ip rule del from $ip table 10$FD
+kill -9 $nebula_pid
 
 # Remove the temporary directory
-rm -rf $DIR/$FD 
+rm -rf $CERT_DIR/$ID

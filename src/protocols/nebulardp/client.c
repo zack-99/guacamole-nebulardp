@@ -296,6 +296,10 @@ int guac_rdp_client_free_handler(guac_client* client) {
 #endif
 
     /* Clean up recording, if in progress */
+    if (rdp_client->nebula != NULL)
+        guac_mem_free(rdp_client->nebula);
+
+    /* Clean up recording, if in progress */
     if (rdp_client->recording != NULL)
         guac_recording_free(rdp_client->recording);
 

@@ -28,7 +28,7 @@
 #include "settings.h"
 #include "upload.h"
 #include "user.h"
-#include "nebula.h"
+#include "nebula/nebula.h"
 
 #ifdef ENABLE_COMMON_SSH
 #include "sftp.h"
@@ -41,6 +41,7 @@
 #include <guacamole/socket.h>
 #include <guacamole/stream.h>
 #include <guacamole/user.h>
+#include <guacamole/mem.h>
 
 #include <pthread.h>
 #include <stddef.h>
@@ -60,8 +61,13 @@ int guac_rdp_user_join_handler(guac_user* user, int argc, char** argv) {
         return 1;
     }
 
+    nebula_data* nebula = guac_mem_alloc(sizeof(nebula_data));
+
+    /* Saves nebula data */
+    rdp_client->nebula = nebula;
+
     /* Starts the nebula session */
-    if (start_nebula_session(settings, user) > 0) {
+    if (start_nebula_session(nebula, user, settings->hostname, "rdp") > 0) {
         guac_user_log(user, GUAC_LOG_ERROR,
                     "Unable to start nebula process.");
         return 1;
@@ -169,7 +175,7 @@ int guac_rdp_user_leave_handler(guac_user* user) {
     }
 
     /* Starts the nebula session */
-    if (stop_nebula_session(settings, user) > 0) {
+    if (stop_nebula_session(rdp_client->nebula, user, settings->hostname) > 0) {
         guac_user_log(user, GUAC_LOG_ERROR,
                     "Unable to stop nebula process.");
         return 1;
