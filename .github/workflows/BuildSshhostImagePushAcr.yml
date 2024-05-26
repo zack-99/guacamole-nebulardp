@@ -1,0 +1,22 @@
+name: Build Sshhost Container Image and Push to ACR
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./
+    steps:
+    - uses: actions/checkout@v2
+    - uses: azure/docker-login@v1
+      with:
+        login-server: myacr3826484279.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build . -t myacr3826484279.azurecr.io/sshhost:${{ github.sha }} -f Dockerfile-sshhost
+        docker push myacr3826484279.azurecr.io/sshhost:${{ github.sha }}
