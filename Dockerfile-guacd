@@ -106,5 +106,5 @@ RUN chown root /usr/sbin/nebula
 COPY ./bin/guacd/* /sbin/
 
 # Copy nebula configuration files
-#COPY ./config/nebula/common/* /etc/nebula/
-#COPY ./config/nebula/guacd/* /etc/nebula/
+COPY ./config/nebula/common/* /etc/nebula/
+COPY ./config/nebula/guacd/* /etc/nebula/
