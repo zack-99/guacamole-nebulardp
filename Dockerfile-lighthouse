@@ -1,0 +1,4 @@
+FROM nebulaoss/nebula
+COPY ./config/nebula/common /etc/nebula/common
+COPY ./config/nebula/lighthouse /etc/nebula
+COPY ./config/nebula/lighthouse/config.lighthouse.yml /config/config.yml
