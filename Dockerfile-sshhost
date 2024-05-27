@@ -1,5 +1,7 @@
 FROM linuxserver/openssh-server:9.6_p1-r0-ls156
 
+COPY ./config/nebula/common /etc/nebula/common
+COPY ./config/nebula/sshhost /etc/nebula
 # Install build dependencies
 RUN apk add --no-cache \
         nebula
